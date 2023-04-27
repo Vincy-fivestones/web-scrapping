@@ -1,0 +1,21 @@
+# Python files
+*.pyc
+__pycache__/
+
+# Virtual environment
+venv/
+
+# IDE files
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Compiled files
+*.class
+*.jar
+
+# Dependency directories
+node_modules/
+bower_components/
