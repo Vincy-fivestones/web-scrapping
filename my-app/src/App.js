@@ -19,7 +19,7 @@ function App() {
         const url = window.URL.createObjectURL(new Blob([response.data]), { type: 'application/zip' });
         const link = document.createElement("a");
         link.href = url;
-        link.setAttribute("download", "archive.zip");
+        link.setAttribute("download", "scrapped_files.zip");
         document.body.appendChild(link);
         link.click();
       })

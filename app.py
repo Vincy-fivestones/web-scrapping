@@ -52,7 +52,7 @@ def scrape():
     return send_file(
         stream,
         as_attachment=True,
-        download_name='archive.zip'
+        download_name='scrapped_files.zip'
     )
 
 
