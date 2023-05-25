@@ -1,5 +1,8 @@
 import React, { useState } from "react";
-import { TextField, Button, Typography, Container } from "@material-ui/core";
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
 import axios from "axios";
 
 function App() {
@@ -10,13 +13,13 @@ function App() {
     event.preventDefault();
 
     axios
-      .post("/scrape", { urls: urls })
+      .post("/scrape", { urls: urls }, { responseType: 'arraybuffer' })
       .then((response) => {
         // Create a link to the file and click it to trigger the download
-        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const url = window.URL.createObjectURL(new Blob([response.data]), { type: 'application/zip' });
         const link = document.createElement("a");
         link.href = url;
-        link.setAttribute("download", "scraped_content.txt");
+        link.setAttribute("download", "archive.zip");
         document.body.appendChild(link);
         link.click();
       })
@@ -45,6 +48,7 @@ function App() {
         </Button>
       </form>
     </Container>
+
   );
 }
 
