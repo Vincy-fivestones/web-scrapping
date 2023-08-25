@@ -56,6 +56,7 @@ function Form() {
       document.body.appendChild(link);
       link.click();
       setMsg({ type: 'success', message: 'Scrapped successfully' });
+      setUrls('')
     },
   });
 

@@ -1,4 +1,4 @@
-from flask import Flask, request, Response, abort
+from flask import Flask, request
 from flask import send_file
 
 from flask_cors import CORS
@@ -38,15 +38,36 @@ def scrape():
             try:
                 content = ""
                 response = requests.get(url)
-                print(response.status_code)
                 response.raise_for_status()
+                print(response.status_code)
 
                 soup = BeautifulSoup(response.content, "html.parser")
+
+                # Handle title special characters
+                title = soup.find("title").get_text()
+                replacements = [
+                    (":", ""),
+                    (".", ""),
+                    ("/", ""),
+                    ("\\", ""),
+                    ("<", ""),
+                    (">", ""),
+                    ('"', ""),
+                    ("|", ""),
+                    ("?", ""),
+                    ("*", ""),
+                    ("^", ""),
+                ]
+                for char, replacement in replacements:
+                    if char in title:
+                        title = title.replace(char, replacement)
+
                 p_tags = soup.find_all(["p", "h1", "h2", "h3", "h4", "h5", "h6", "li"])
+
                 for p in p_tags:
                     content += p.get_text() + "\n"
 
-                # Add text content to .txt and add it into the zip
+                # Add text content to .docx and add it into the zip
                 if content:
                     print("Add file")
                     document = Document()
@@ -54,17 +75,17 @@ def scrape():
                     file_stream = BytesIO()
                     document.save(file_stream)
                     file_stream.seek(0)
-                    # print(file_stream.getvalue())
-                    zf.writestr(
-                        "scrapped_file_" + str(index) + ".docx", file_stream.getvalue()
-                    )
+
+                    zf.writestr(title + ".docx", file_stream.getvalue())
 
             except:
                 # Throw error message
                 message = "Failed to scrap link: " + url
                 return message, 400
+
         # Check zip files
         zf.printdir()
+
     stream.seek(0)
     print("Return zip file")
 
